@@ -1,0 +1,35 @@
+{
+  "name": "aps-ev",
+  "version": "0.0.9",
+  "description": "aps ev api",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "standard && node obj.js",
+    "fix": "standard --fix",
+    "dev": "nodemon aps/test/",
+    "start": "NODE_ENV=production pm2 start index.js --name aps-ev --max-memory-restart 128M",
+    "install": "npm i uWebSockets.js@uNetworking/uWebSockets.js#v20.49.0",
+    "server": "nodemon server"
+  },
+  "author": "f.riva@sotefin.ch",
+  "license": "MIT",
+  "dependencies": {
+    "date-fns": "^4.1.0",
+    "dotenv": "^16.4.7",
+    "mongodb": "^6.12.0",
+    "node-fetch": "^3.3.2",
+    "node-snap7": "^1.0.8",
+    "pino": "^9.6.0",
+    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v20.49.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9",
+    "standard": "^17.1.2"
+  },
+  "standard": {
+    "ignore": [
+      "/public"
+    ]
+  }
+}
