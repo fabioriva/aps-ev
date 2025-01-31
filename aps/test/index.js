@@ -62,10 +62,10 @@ import Router from '../../Router.js'
 
 const start = async () => {
   try {
-    const app = uWS.App().listen(def.PORT, token => logger.info(token))
+    const app = uWS.App().listen(def.HTTP, token => logger.info(token))
     // db
     const db = new Db(def.DB)
-    db.run()
+    db.run(def)
     // plc comm
     const plc01 = new Plc(def.PLC)
     plc01.data(def, obj)

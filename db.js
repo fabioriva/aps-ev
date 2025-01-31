@@ -1,11 +1,13 @@
 import { format } from 'date-fns'
 import * as net from 'net'
+import * as os from 'os'
 import { MongoClient } from 'mongodb'
 import { logger } from './logger.js'
 import { getPlcDateTime } from './utils7.js'
 
 const LOG_LEN = 32
-const PORT = 9101
+
+console.log(os.networkInterfaces())
 
 class Db {
   constructor (db) {
@@ -25,18 +27,18 @@ class Db {
     logger.debug('document was inserted with the _id: %s', res.insertedId)
   }
 
-  async run () {
+  async run (def) {
     const client = new MongoClient(process.env.MONGODB_URI)
     await client.connect()
     const db = client.db(this.db)
     this.collection = db.collection('ev')
-    this.server()
+    this.server(def.TCP, def.SERVER)
   }
 
-  server () {
+  server (port, host) {
     const this_ = this
     const server = net.createServer()
-    server.listen(PORT, '192.168.20.56', () => logger.info('TCP log server is running on port ' + PORT + '.'))
+    server.listen(port, host, () => logger.info('TCP log server is running on port ' + port + '.'))
     server.on('connection', function (sock) {
       const client = sock.remoteAddress + ':' + sock.remotePort
       logger.info('socket connected ' + client)
