@@ -1,13 +1,10 @@
 import { format } from 'date-fns'
 import * as net from 'net'
-import * as os from 'os'
 import { MongoClient } from 'mongodb'
 import { logger } from './logger.js'
 import { getPlcDateTime } from './utils7.js'
 
 const LOG_LEN = 32
-
-console.log(os.networkInterfaces())
 
 class Db {
   constructor (db) {
