@@ -2,12 +2,16 @@ import { logger } from './logger.js'
 import { sendJson } from './json.js'
 import { WriteArea } from './utils7.js'
 
-const PARAM_NOT_VALID = 'parameters not valid'
+const CARD_NOT_VALID = 'parameters not valid'
 const CARD_OUT_OF_RANGE = 'card out of range'
-// const CARD_NOT_PARKED = 'card not parked'
-// const CARD_NOT_QUEUED = 'card not queued'
-// const CARD_QUEUED = 'card queued'
-// const CARD_NOT_PARKED_IN_EV = 'card not parked in EV stall'
+const CARD_NOT_EV = 'card out of range'
+const QUEUE_FULL = 'queue is full'
+const CARD_QUEUED = 'card queued'
+const CARD_IN_OPERATION = 'card in operation'
+const CARD_NOT_PARKED = 'card not parked'
+const CARD_NOT_QUEUED = 'card not queued'
+const CARD_NOT_PARKED_IN_EV = 'card not parked in EV stall'
+const CARD_PARKED_IN_EV = 'card parked in EV stall'
 
 class Response {
   constructor (severity, Response) {
@@ -64,7 +68,7 @@ class Router {
       this.log(req)
       const card = parseInt(req.getParameter(0))
       if (!Number.isInteger(card)) {
-        return sendJson(res, this.error(card, PARAM_NOT_VALID))
+        return sendJson(res, this.error(card, CARD_NOT_VALID))
       }
       if (card < def.CARD_MIN || card > def.CARD_MAX) {
         return sendJson(res, this.error(card, CARD_OUT_OF_RANGE))
@@ -87,7 +91,7 @@ class Router {
       this.log(req)
       const card = parseInt(req.getParameter(0))
       if (!Number.isInteger(card)) {
-        return sendJson(res, this.error(card, PARAM_NOT_VALID))
+        return sendJson(res, this.error(card, CARD_NOT_VALID))
       }
       if (card < def.CARD_MIN || card > def.CARD_MAX) {
         return sendJson(res, this.error(card, CARD_OUT_OF_RANGE))
@@ -106,7 +110,7 @@ class Router {
       this.log(req)
       const card = parseInt(req.getParameter(0))
       if (!Number.isInteger(card)) {
-        return sendJson(res, this.error(card, PARAM_NOT_VALID))
+        return sendJson(res, this.error(card, CARD_NOT_VALID))
       }
       if (card < def.CARD_MIN || card > def.CARD_MAX) {
         return sendJson(res, this.error(card, CARD_OUT_OF_RANGE))
@@ -129,7 +133,7 @@ class Router {
       this.log(req)
       const card = parseInt(req.getParameter(0))
       if (!Number.isInteger(card)) {
-        return sendJson(res, this.error(card, PARAM_NOT_VALID))
+        return sendJson(res, this.error(card, CARD_NOT_VALID))
       }
       if (card < def.CARD_MIN || card > def.CARD_MAX) {
         return sendJson(res, this.error(card, CARD_OUT_OF_RANGE))
