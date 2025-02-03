@@ -17,10 +17,10 @@ class Response {
 }
 
 class Router {
-  constructor (app, mdb, plc) {
+  constructor (app, srv, plc) {
     this.app = app // uws
-    this.mdb = mdb // mongodb
     this.plc = plc // s7
+    this.srv = srv // s7 logs
   }
 
   error (card, error) {
@@ -52,7 +52,8 @@ class Router {
       res.onAborted(() => {
         res.aborted = true
       })
-      const docs = await this.mdb.find()
+      // const docs = await this.srv.db.find('SELECT * FROM logs ORDER BY d1 DESC')
+      const docs = await this.srv.db.findAll()
       sendJson(res, docs)
     })
     this.app.get(prefix + '/overview', (res, req) => {
