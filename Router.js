@@ -120,7 +120,7 @@ class Router {
     this.app.get(prefix + '/queue/swap/in/:card', async (res, req) => {
       this.log(req)
       const card = parseInt(req.getParameter(0))
-      const error = checkCard(card, def, obj, true, false, obj.exitQueue)
+      const error = checkCard(card, def, obj, true, false, obj.swapQueue)
       if (error !== undefined) {
         return sendJson(res, this.error(card, error))
       }
@@ -133,7 +133,7 @@ class Router {
     this.app.get(prefix + '/queue/swap/out/:card', async (res, req) => {
       this.log(req)
       const card = parseInt(req.getParameter(0))
-      const error = checkCard(card, def, obj, false, true, obj.exitQueue)
+      const error = checkCard(card, def, obj, false, true, obj.swapQueue)
       if (error !== undefined) {
         return sendJson(res, this.error(card, error))
       }
