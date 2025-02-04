@@ -1,14 +1,3 @@
-export const APS = 'test'
-export const DB = 'test_db'
-export const HTTP = 9100
-export const PLC = {
-  ip: '192.168.20.55',
-  rack: 0,
-  slot: 1,
-  polling_time: 999
-}
-export const SERVER = '192.168.20.99'
-export const TCP = 9101
 export const EXIT_QUEUE_LEN = 5
 export const SWAP_QUEUE_LEN = 10
 

@@ -8,11 +8,11 @@ import { updateQueue } from './Queue.js'
 import { updateStalls } from './Stall.js'
 
 class Plc extends EventEmitter {
-  constructor (plc) {
+  constructor (ip, rack, slot) {
     super()
     this.client = new snap7.S7Client()
-    this.online = this.client.ConnectTo(plc.ip, plc.rack, plc.slot)
-    this.params = plc
+    this.online = this.client.ConnectTo(ip, rack, slot)
+    // this.params = plc
   }
 
   error (e) {
@@ -49,7 +49,7 @@ class Plc extends EventEmitter {
           comm: this.online
         })
         this.data(def, obj)
-      }, this.params.polling_time)
+      }, process.env.POLL_TIME)
     } catch (e) {
       this.error(e)
     } finally {
@@ -111,7 +111,7 @@ class Plc extends EventEmitter {
           comm: this.online
         })
         this.map(def, obj)
-      }, this.params.polling_time)
+      }, process.env.POLL_TIME)
     } catch (e) {
       this.error(e)
     } finally {
@@ -122,7 +122,6 @@ class Plc extends EventEmitter {
 
   async run (def, obj) {
     try {
-      // this.online = this.client.ConnectTo(this.params.ip, this.params.rack, this.params.slot)
       this.ev_cards(def, obj)
       this.data(def, obj)
     } catch (e) {
