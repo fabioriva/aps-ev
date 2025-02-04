@@ -4,14 +4,42 @@ import { WriteArea } from './utils7.js'
 
 const CARD_NOT_VALID = 'parameters not valid'
 const CARD_OUT_OF_RANGE = 'card out of range'
-const CARD_NOT_EV = 'card out of range'
+const CARD_NOT_EV = 'card is not EV'
 const QUEUE_FULL = 'queue is full'
 const CARD_QUEUED = 'card queued'
 const CARD_IN_OPERATION = 'card in operation'
 const CARD_NOT_PARKED = 'card not parked'
 const CARD_NOT_QUEUED = 'card not queued'
-const CARD_NOT_PARKED_IN_EV = 'card not parked in EV stall'
-const CARD_PARKED_IN_EV = 'card parked in EV stall'
+// const CARD_NOT_PARKED_IN_EV = 'card not parked in EV stall'
+// const CARD_PARKED_IN_EV = 'card parked in EV stall'
+
+function checkCard (card, def, obj, in_, out, queue) {
+  if (!Number.isInteger(card)) {
+    return CARD_NOT_VALID
+  }
+  if (card < def.CARD_MIN || card > def.CARD_MAX) {
+    return CARD_OUT_OF_RANGE
+  }
+  if (obj.cards.find(element => element.nr === card).type === 0) {
+    return CARD_NOT_EV
+  }
+  if (obj.devices.find(element => element.card === card)) {
+    return CARD_IN_OPERATION
+  }
+  if (in_ && queue[queue.length - 1].card !== 0) {
+    return QUEUE_FULL
+  }
+  if (in_ && queue.some(element => element.card === card)) {
+    return CARD_QUEUED
+  }
+  if (in_ && !obj.stalls.some(element => element.status === card)) {
+    return CARD_NOT_PARKED
+  }
+  if (out && !queue.some(element => element.card === card)) {
+    return CARD_NOT_QUEUED
+  }
+  return undefined
+}
 
 class Response {
   constructor (severity, Response) {
@@ -56,7 +84,6 @@ class Router {
       res.onAborted(() => {
         res.aborted = true
       })
-      // const docs = await this.srv.db.find('SELECT * FROM logs ORDER BY d1 DESC')
       const docs = await this.srv.db.findAll()
       sendJson(res, docs)
     })
@@ -67,20 +94,10 @@ class Router {
     this.app.get(prefix + '/queue/exit/in/:card', async (res, req) => {
       this.log(req)
       const card = parseInt(req.getParameter(0))
-      if (!Number.isInteger(card)) {
-        return sendJson(res, this.error(card, CARD_NOT_VALID))
+      const error = checkCard(card, def, obj, true, false, obj.exitQueue)
+      if (error !== undefined) {
+        return sendJson(res, this.error(card, error))
       }
-      if (card < def.CARD_MIN || card > def.CARD_MAX) {
-        return sendJson(res, this.error(card, CARD_OUT_OF_RANGE))
-      }
-      // const item = obj.exitQueue.find(i => i.card === card)
-      // if (item !== undefined) {
-      //   return sendJson(res, this.error(card, CARD_QUEUED))
-      // }
-      // const stall = obj.stalls.find(s => s.status === card)
-      // if (stall === undefined) {
-      //   return sendJson(res, this.error(card, CARD_NOT_PARKED))
-      // }
       res.onAborted(() => {
         res.aborted = true
       })
@@ -90,16 +107,10 @@ class Router {
     this.app.get(prefix + '/queue/exit/out/:card', async (res, req) => {
       this.log(req)
       const card = parseInt(req.getParameter(0))
-      if (!Number.isInteger(card)) {
-        return sendJson(res, this.error(card, CARD_NOT_VALID))
+      const error = checkCard(card, def, obj, false, true, obj.exitQueue)
+      if (error !== undefined) {
+        return sendJson(res, this.error(card, error))
       }
-      if (card < def.CARD_MIN || card > def.CARD_MAX) {
-        return sendJson(res, this.error(card, CARD_OUT_OF_RANGE))
-      }
-      // const item = obj.exitQueue.find(i => i.card === card)
-      // if (item === undefined) {
-      //   return sendJson(res, this.error(card, CARD_NOT_QUEUED))
-      // }
       res.onAborted(() => {
         res.aborted = true
       })
@@ -109,20 +120,10 @@ class Router {
     this.app.get(prefix + '/queue/swap/in/:card', async (res, req) => {
       this.log(req)
       const card = parseInt(req.getParameter(0))
-      if (!Number.isInteger(card)) {
-        return sendJson(res, this.error(card, CARD_NOT_VALID))
+      const error = checkCard(card, def, obj, true, false, obj.exitQueue)
+      if (error !== undefined) {
+        return sendJson(res, this.error(card, error))
       }
-      if (card < def.CARD_MIN || card > def.CARD_MAX) {
-        return sendJson(res, this.error(card, CARD_OUT_OF_RANGE))
-      }
-      // const item = obj.swapQueue.find(i => i.card === card)
-      // if (item !== undefined) {
-      //   return sendJson(res, this.error(card, CARD_QUEUED))
-      // }
-      // const stall = obj.stalls.find(s => s.status === card)
-      // if (stall === undefined) {
-      //   return sendJson(res, this.error(card, CARD_NOT_PARKED))
-      // }
       res.onAborted(() => {
         res.aborted = true
       })
@@ -132,16 +133,10 @@ class Router {
     this.app.get(prefix + '/queue/swap/out/:card', async (res, req) => {
       this.log(req)
       const card = parseInt(req.getParameter(0))
-      if (!Number.isInteger(card)) {
-        return sendJson(res, this.error(card, CARD_NOT_VALID))
+      const error = checkCard(card, def, obj, false, true, obj.exitQueue)
+      if (error !== undefined) {
+        return sendJson(res, this.error(card, error))
       }
-      if (card < def.CARD_MIN || card > def.CARD_MAX) {
-        return sendJson(res, this.error(card, CARD_OUT_OF_RANGE))
-      }
-      // const item = obj.swapQueue.find(i => i.card === card)
-      // if (item === undefined) {
-      //   return sendJson(res, this.error(card, CARD_NOT_QUEUED))
-      // }
       res.onAborted(() => {
         res.aborted = true
       })

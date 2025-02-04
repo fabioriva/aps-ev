@@ -2,6 +2,7 @@ import { EventEmitter } from 'events'
 import snap7 from 'node-snap7'
 import { logger } from './logger.js'
 import { ReadArea } from './utils7.js'
+import { updateCards } from './Card.js'
 import { updateDevices } from './Device.js'
 import { updateQueue } from './Queue.js'
 import { updateStalls } from './Stall.js'
@@ -58,14 +59,31 @@ class Plc extends EventEmitter {
     }
   }
 
-  async init (def, obj) {
+  async ev_cards (def, obj) {
+    try {
+      const { area, dbNumber, start, amount, wordLen } = def.EV_CARDS_READ
+      const buffer = this.online ? await ReadArea(this.client, area, dbNumber, start, amount, wordLen) : Buffer.alloc(amount)
+      // let byte = 0
+      // obj.cards.forEach(element => {
+      //   console.log(element, buffer.readInt16BE(byte), buffer.readInt16BE(byte + 2))
+      //   element.ev_type = buffer.readInt16BE(byte)
+      //   element.ev_wantToCharge = buffer.readInt16BE(byte + 2)
+      //   byte += 4
+      // })
+      await updateCards(0, buffer, def.CARD_LEN, obj.cards)
+    } catch (e) {
+      this.error(e)
+    }
+  }
+
+  async ev_stalls (def, obj) {
     try {
       const { area, dbNumber, start, amount, wordLen } = def.EV_STALLS_READ
       const buffer = this.online ? await ReadArea(this.client, area, dbNumber, start, amount, wordLen) : Buffer.alloc(amount)
       let byte = 0
-      obj.stalls.forEach(s => {
-        s.ev_type = buffer.readInt16BE(byte)
-        s.ev_isCharging = buffer.readInt16BE(byte + 2)
+      obj.stalls.forEach(element => {
+        element.ev_type = buffer.readInt16BE(byte)
+        element.ev_isCharging = buffer.readInt16BE(byte + 2)
         byte += 4
       })
     } catch (e) {
@@ -97,18 +115,20 @@ class Plc extends EventEmitter {
     } catch (e) {
       this.error(e)
     } finally {
-      this.init(def, obj)
-      this.publish('aps/map', obj.stalls)
+      this.ev_stalls(def, obj)
+      // this.publish('aps/map', obj.stalls)
     }
   }
 
-  // async run (def, obj) {
-  //   try {
-  //     this.online = this.client.ConnectTo(this.params.ip, this.params.rack, this.params.slot)
-  //   } catch (e) {
-  //     this.error(e)
-  //   }
-  // }
+  async run (def, obj) {
+    try {
+      // this.online = this.client.ConnectTo(this.params.ip, this.params.rack, this.params.slot)
+      this.ev_cards(def, obj)
+      this.data(def, obj)
+    } catch (e) {
+      this.error(e)
+    }
+  }
 
   publish (channel, data) {
     this.emit('pub', { channel, data: JSON.stringify(data) })

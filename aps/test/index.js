@@ -68,7 +68,7 @@ const start = async () => {
     log.run(def.SERVER, def.TCP)
     // plc comm
     const plc01 = new Plc(def.PLC)
-    plc01.data(def, obj)
+    plc01.run(def, obj)
     plc01.on('pub', ({ channel, data }) => {
       if (channel === 'aps/queue') {
         const { index, queue } = JSON.parse(data)
