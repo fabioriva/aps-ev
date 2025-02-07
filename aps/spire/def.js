@@ -2,10 +2,10 @@ export const EXIT_QUEUE_LEN = 5
 export const SWAP_QUEUE_LEN = 10
 
 const DB_DATA = 541
-const DB_DATA_LEN = 136
+const DB_DATA_LEN = 142
 export const DB_DATA_INIT_DEVICE = 0
 export const DB_DATA_INIT_EXIT_QUEUE = 36
-export const DB_DATA_INIT_SWAP_QUEUE = 70
+export const DB_DATA_INIT_SWAP_QUEUE = 74
 
 export const DATA_READ = {
   area: 0x84,
