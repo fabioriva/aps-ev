@@ -4,16 +4,16 @@ import { WriteArea } from './utils7.js'
 export const checkEv = async (def, item, obj, plc) => {
   logger.debug('queue item: %o', item)
   const { card, slot } = item
-  if (card >= def.CARD_MIN && card <= def.CARD_MAX && isEv(obj, slot)) {
-    const busy = await isEvBusy(def.APS, card, slot)
-    logger.info('card %s slot %s is busy: %s', card, slot, busy)
-    if (!busy) {
-      await unlockEv(def.EV_STALLS_READ, plc, slot)
-    }
+  // if (card >= def.CARD_MIN && card <= def.CARD_MAX && isEv(obj, slot)) {
+  const busy = await isEvBusy(def.APS, card, slot)
+  logger.info('card %s slot %s is busy: %s', card, slot, busy)
+  if (!busy) {
+    await unlockEv(def.EV_STALLS_READ, plc, slot)
   }
+  // }
 }
 
-const isEv = (obj, slot) => obj.stalls.some(stall => stall.nr === slot && stall.ev_type !== 0)
+// const isEv = (obj, slot) => obj.stalls.some(stall => stall.nr === slot && stall.ev_type !== 0)
 
 const isEvBusy = async (aps, card, slot) => {
   try {

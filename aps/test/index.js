@@ -18,7 +18,7 @@ const start = async () => {
   try {
     const app = uWS.App().listen(HTTP, token => logger.info(token))
     // db
-    const log = new Server('sqlite.db')
+    const log = new Server('') // ':memory:' or db name 'sqlite.db'
     log.run(process.env.SERVER, process.env.TCP)
     // plc comm
     const plc01 = new Plc(IP, RACK, SLOT)

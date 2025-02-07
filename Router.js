@@ -117,10 +117,10 @@ class Router {
       logger.info('api %s card %s', req.getUrl(), card)
       sendJson(res, await this.write(card, def.REQ_EXIT_OUT))
     })
-    this.app.get(prefix + '/queue/swap/in/:card', async (res, req) => {
+    this.app.get(prefix + '/queue/swap/ev/in/:card', async (res, req) => {
       this.log(req)
       const card = parseInt(req.getParameter(0))
-      const error = checkCard(card, def, obj, true, false, obj.swapQueue)
+      const error = checkCard(card, def, obj, true, false, obj.swapEvQueue)
       if (error !== undefined) {
         return sendJson(res, this.error(card, error))
       }
@@ -128,12 +128,12 @@ class Router {
         res.aborted = true
       })
       logger.info('api %s card %s', req.getUrl(), card)
-      sendJson(res, await this.write(card, def.REQ_SWAP_IN))
+      sendJson(res, await this.write(card, def.REQ_SWAP_EV_IN))
     })
-    this.app.get(prefix + '/queue/swap/out/:card', async (res, req) => {
+    this.app.get(prefix + '/queue/swap/ev/out/:card', async (res, req) => {
       this.log(req)
       const card = parseInt(req.getParameter(0))
-      const error = checkCard(card, def, obj, false, true, obj.swapQueue)
+      const error = checkCard(card, def, obj, false, true, obj.swapEvQueue)
       if (error !== undefined) {
         return sendJson(res, this.error(card, error))
       }
@@ -141,7 +141,7 @@ class Router {
         res.aborted = true
       })
       logger.info('api %s card %s', req.getUrl(), card)
-      sendJson(res, await this.write(card, def.REQ_SWAP_OUT))
+      sendJson(res, await this.write(card, def.REQ_SWAP_EV_OUT))
     })
     this.app.get(prefix + '/stalls', (res, req) => {
       this.log(req)

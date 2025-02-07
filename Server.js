@@ -1,4 +1,4 @@
-// import { format } from 'date-fns'
+import { format } from 'date-fns'
 import net from 'net'
 import Db from './SQLite.js'
 import { logger } from './logger.js'
@@ -9,10 +9,11 @@ const LOG_LEN = 32
 class Document {
   constructor (log) {
     this.card = log.card
-    // const d = format(log.date, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    const d = format(log.date, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     // this.date = new Date(d)
-    this.d1 = null
-    this.d2 = null
+    this.date = d
+    // this.d1 = null
+    // this.d2 = null
     this.endpoint = this.setEndpoint(log.device)
     this.response = this.setResponse(log.operation)
   }
@@ -20,8 +21,10 @@ class Document {
   setEndpoint (n) {
     if (n === 1) return '/queue/exit/in/:card'
     if (n === 2) return '/queue/exit/out/:card'
-    if (n === 3) return '/queue/swap/in/:card'
-    if (n === 4) return '/queue/swap/out/:card'
+    if (n === 3) return '/queue/swap/ev/in/:card'
+    if (n === 4) return '/queue/swap/ev/out/:card'
+    if (n === 5) return '/queue/swap/st/in/:card'
+    if (n === 6) return '/queue/swap/st/out/:card'
     return undefined
   }
 
@@ -82,8 +85,13 @@ class Server {
         // console.log(log)
         const doc = new Document(log)
         // console.log(doc)
-        // await this_.db.insert(Object.values(doc))
         await this_.db.saveLog(doc)
+        // const d1 = await this_.db.get('SELECT datetime("now", "subsec")')
+        // const d2 = await this_.db.get('SELECT datetime("now", "localtime", "subsec")')
+        // const d3 = await this_.db.get('SELECT datetime(1092941466, "unixepoch")')
+        // console.log(d1, d2, d3)
+        // const d4 = await this_.db.get(`SELECT datetime(${doc.dutc}, "unixepoch", "localtime")`)
+        // console.log(d4)
       })
       sock.on('close', function () {
         logger.info('socket close ' + client)
