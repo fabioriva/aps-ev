@@ -10,7 +10,7 @@
     "dev": "nodemon aps/test/",
     "start": "NODE_ENV=production pm2 start index.js --name aps-ev --max-memory-restart 128M",
     "install": "npm i uWebSockets.js@uNetworking/uWebSockets.js#v20.49.0",
-    "server": "nodemon server"
+    "spire": "nodemon aps/spire"
   },
   "author": "f.riva@sotefin.ch",
   "license": "MIT",

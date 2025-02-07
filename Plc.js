@@ -35,13 +35,14 @@ class Plc extends EventEmitter {
           await Promise.all([
             updateDevices(def.DB_DATA_INIT_DEVICE, buffer, 6, obj.devices),
             updateQueue(def.DB_DATA_INIT_EXIT_QUEUE, buffer, 6, obj.exitQueue),
-            updateQueue(def.DB_DATA_INIT_SWAP_EV_QUEUE, buffer, 6, obj.swapEvQueue),
-            updateQueue(def.DB_DATA_INIT_SWAP_ST_QUEUE, buffer, 6, obj.swapStQueue)
+            updateQueue(def.DB_DATA_INIT_SWAP_QUEUE, buffer, 6, obj.swapQueue)
+            // updateQueue(def.DB_DATA_INIT_SWAP_EV_QUEUE, buffer, 6, obj.swapEvQueue),
+            // updateQueue(def.DB_DATA_INIT_SWAP_ST_QUEUE, buffer, 6, obj.swapStQueue)
           ])
           this.exec_time(ping, 'data')
         } else {
           this.online = this.client.Connect()
-          this.online ? logger.info('Connected to PLC %s', this.params.ip) : logger.info('Connecting to PLC %s ...', this.params.ip)
+          this.online ? logger.info('Connected to PLC') : logger.info('Connecting to PLC ...')
         }
         if (this.online_ !== this.online) {
           this.online_ = this.online
@@ -54,7 +55,8 @@ class Plc extends EventEmitter {
     } catch (e) {
       this.error(e)
     } finally {
-      const q = obj.exitQueue.concat(obj.swapEvQueue, obj.swapStQueue).filter(item => item.card > 0)
+      const q = obj.exitQueue.concat(obj.swapQueue).filter(item => item.card > 0)
+      // const q = obj.exitQueue.concat(obj.swapEvQueue, obj.swapStQueue).filter(item => item.card > 0)
       obj.q.index < q.length - 1 ? obj.q.index += 1 : obj.q.index = 0
       // console.log(obj.q.index, q)
       this.publish('aps/queue', { queue: q, index: obj.q.index })
@@ -104,7 +106,7 @@ class Plc extends EventEmitter {
           this.exec_time(ping, 'map')
         } else {
           this.online = this.client.Connect()
-          this.online ? logger.info('Connected to PLC %s', this.params.ip) : logger.info('Connecting to PLC %s ...', this.params.ip)
+          this.online ? logger.info('Connected to PLC') : logger.info('Connecting to PLC ...')
         }
         if (this.online_ !== this.online) {
           this.online_ = this.online
