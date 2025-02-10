@@ -128,7 +128,7 @@ class Router {
         res.aborted = true
       })
       logger.info('api %s card %s', req.getUrl(), card)
-      sendJson(res, await this.write(card, def.REQ_SWAP_EV_IN))
+      sendJson(res, await this.write(card, def.REQ_SWAP_IN))
     })
     this.app.get(prefix + '/queue/swap/ev/out/:card', async (res, req) => {
       this.log(req)
@@ -141,7 +141,7 @@ class Router {
         res.aborted = true
       })
       logger.info('api %s card %s', req.getUrl(), card)
-      sendJson(res, await this.write(card, def.REQ_SWAP_EV_OUT))
+      sendJson(res, await this.write(card, def.REQ_SWAP_OUT))
     })
     this.app.get(prefix + '/stalls', (res, req) => {
       this.log(req)
