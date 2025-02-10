@@ -1,11 +1,11 @@
 import 'dotenv/config.js'
 // import fetch from 'node-fetch'
 import * as uWS from 'uWebSockets.js'
-import { checkEv } from './ev.js'
-import { logger } from './logger.js'
-import Plc from './Plc.js'
-import Router from './Router.js'
-import Server from './Server.js'
+import { checkEv } from './lib/ev.js'
+import { logger } from './lib/logger.js'
+import Plc from './lib//Plc.js'
+import Router from './lib/Router.js'
+import Server from './lib/Server.js'
 
 const HTTP = Number(process.env.HTTP)
 const IP = process.env.PLC_IP

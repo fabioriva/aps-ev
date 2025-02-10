@@ -6,10 +6,10 @@ import {
   // SWAP_ST_QUEUE_LEN,
   STALLS
 } from './def.js'
-import { Device } from '../../Device.js'
-import { generateCards } from '../../Card.js'
-import { generateQueue } from '../../Queue.js'
-import { generateStalls } from '../../Stall.js'
+import { Device } from '../../lib/Device.js'
+import { generateCards } from '../../lib/Card.js'
+import { generateQueue } from '../../lib/Queue.js'
+import { generateStalls } from '../../lib/Stall.js'
 
 const EU1 = new Device(1, 'EU1')
 const EU2 = new Device(2, 'EU2')

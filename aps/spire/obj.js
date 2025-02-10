@@ -1,8 +1,8 @@
 import { CARDS, EXIT_QUEUE_LEN, SWAP_QUEUE_LEN, STALLS } from './def.js'
-import { Device } from '../../Device.js'
-import { generateCards } from '../../Card.js'
-import { generateQueue } from '../../Queue.js'
-import { generateStalls } from '../../Stall.js'
+import { Device } from '../../lib/Device.js'
+import { generateCards } from '../../lib/Card.js'
+import { generateQueue } from '../../lib/Queue.js'
+import { generateStalls } from '../../lib/Stall.js'
 
 const EVT1 = new Device(1, 'EVT1')
 const EVT2 = new Device(2, 'EVT2')
