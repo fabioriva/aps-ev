@@ -1,8 +1,8 @@
 import 'dotenv/config.js'
-// import fetch from 'node-fetch'
 import * as uWS from 'uWebSockets.js'
 import { checkEv } from './lib/ev.js'
 import { logger } from './lib/logger.js'
+import Db from './lib/SQLite.js'
 import Plc from './lib//Plc.js'
 import Router from './lib/Router.js'
 import Server from './lib/Server.js'
@@ -16,7 +16,9 @@ const start = async (def, obj) => {
   try {
     const app = uWS.App().listen(HTTP, token => logger.info(token))
     // db
-    const log = new Server('sqlite.db') // ':memory:' or empty '' for anonymous db or db name 'sqlite.db'
+    const db = new Db('sqlite.db') // ':memory:' or empty '' for anonymous db or db name 'my.db'
+    // server log
+    const log = new Server(db)
     log.run(process.env.SERVER, process.env.TCP)
     // plc comm
     const plc01 = new Plc(IP, RACK, SLOT)
@@ -29,6 +31,7 @@ const start = async (def, obj) => {
         }
       }
     })
+    // map service
     const plc02 = new Plc(IP, RACK, SLOT)
     plc02.map(def, obj)
     // api routes
