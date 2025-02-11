@@ -1,7 +1,7 @@
 import 'dotenv/config.js'
 import * as uWS from 'uWebSockets.js'
 import { checkEv } from './lib/ev.js'
-import { logger } from './lib/logger.js'
+import logger from './lib/logger.js'
 import db from './lib/db.js'
 import Plc from './lib//Plc.js'
 import Router from './lib/Router.js'
