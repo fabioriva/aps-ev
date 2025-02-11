@@ -2,10 +2,11 @@ import 'dotenv/config.js'
 import * as uWS from 'uWebSockets.js'
 import { checkEv } from './lib/ev.js'
 import { logger } from './lib/logger.js'
-import Db from './lib/SQLite.js'
+// import Db from './lib/SQLite.js'
+import db from './lib/db.js'
 import Plc from './lib//Plc.js'
 import Router from './lib/Router.js'
-import Server from './lib/Server.js'
+import server from './lib/Server.js'
 
 const HTTP = Number(process.env.HTTP)
 const IP = process.env.PLC_IP
@@ -16,10 +17,10 @@ const start = async (def, obj) => {
   try {
     const app = uWS.App().listen(HTTP, token => logger.info(token))
     // db
-    const db = new Db('sqlite.db') // ':memory:' or empty '' for anonymous db or db name 'my.db'
+    // const db = new Db('sqlite.db') // ':memory:' or empty '' for anonymous db or db name 'my.db'
     // server log
-    const log = new Server(db)
-    log.run(process.env.SERVER, process.env.TCP)
+    // const log = new Server(db)
+    // log.run(process.env.SERVER, process.env.TCP)
     // plc comm
     const plc01 = new Plc(IP, RACK, SLOT)
     plc01.run(def, obj)
@@ -35,8 +36,10 @@ const start = async (def, obj) => {
     const plc02 = new Plc(IP, RACK, SLOT)
     plc02.map(def, obj)
     // api routes
-    const router = new Router(app, log, plc01)
+    const router = new Router(app, db, plc01)
     router.run(def, obj, `/aps/${process.env.APS}/ev`)
+    // log server
+    server(db, process.env.SERVER, process.env.TCP)
   } catch (err) {
     logger.error(new Error(err))
     process.exit(1)

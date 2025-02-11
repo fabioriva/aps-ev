@@ -130,5 +130,7 @@ dist
 .pnp.*
 
 # sqlite db
-
 *.db
+
+# temp files
+/tmp

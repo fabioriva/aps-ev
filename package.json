@@ -15,12 +15,12 @@
   "author": "f.riva@sotefin.ch",
   "license": "MIT",
   "dependencies": {
+    "better-sqlite3": "^11.8.1",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
     "node-fetch": "^3.3.2",
     "node-snap7": "^1.0.8",
     "pino": "^9.6.0",
-    "sqlite3": "^5.1.7",
     "uWebSockets.js": "github:uNetworking/uWebSockets.js#v20.49.0"
   },
   "devDependencies": {
