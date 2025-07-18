@@ -1,11 +1,15 @@
-export const EXIT_QUEUE_LEN = 5
-export const SWAP_QUEUE_LEN = 10
+export const EXIT_ST_QUEUE_LEN = 5
+export const EXIT_EV_QUEUE_LEN = 5
+export const SWAP_EV_QUEUE_LEN = 5
+export const SWAP_ST_QUEUE_LEN = 5
 
 const DB_DATA = 541
-const DB_DATA_LEN = 142
+const DB_DATA_LEN = 188
 export const DB_DATA_INIT_DEVICE = 0
-export const DB_DATA_INIT_EXIT_QUEUE = 36
-export const DB_DATA_INIT_SWAP_QUEUE = 74
+export const DB_DATA_INIT_EXIT_ST_QUEUE = 36
+export const DB_DATA_INIT_EXIT_EV_QUEUE = 74
+export const DB_DATA_INIT_SWAP_EV_QUEUE = 112
+export const DB_DATA_INIT_SWAP_ST_QUEUE = 150
 
 export const DATA_READ = {
   area: 0x84,
@@ -28,17 +32,45 @@ export const REQ_EXIT_OUT = {
   amount: 2,
   wordLen: 0x02
 }
-export const REQ_SWAP_IN = {
+export const REQ_EXIT_EV_IN = {
   area: 0x84,
   dbNumber: DB_DATA,
-  start: 138,
+  start: 108,
   amount: 2,
   wordLen: 0x02
 }
-export const REQ_SWAP_OUT = {
+export const REQ_EXIT_EV_OUT = {
   area: 0x84,
   dbNumber: DB_DATA,
-  start: 140,
+  start: 110,
+  amount: 2,
+  wordLen: 0x02
+}
+export const REQ_SWAP_EV_IN = {
+  area: 0x84,
+  dbNumber: DB_DATA,
+  start: 146,
+  amount: 2,
+  wordLen: 0x02
+}
+export const REQ_SWAP_EV_OUT = {
+  area: 0x84,
+  dbNumber: DB_DATA,
+  start: 148,
+  amount: 2,
+  wordLen: 0x02
+}
+export const REQ_SWAP_ST_IN = {
+  area: 0x84,
+  dbNumber: DB_DATA,
+  start: 184,
+  amount: 2,
+  wordLen: 0x02
+}
+export const REQ_SWAP_ST_OUT = {
+  area: 0x84,
+  dbNumber: DB_DATA,
+  start: 186,
   amount: 2,
   wordLen: 0x02
 }
